@@ -1,0 +1,307 @@
+---
+title: "Aula 1"
+in_header: \usepackage{graphicx, color, verbatim, fancyvrb, setspace, amsfonts, amsmath,amssymb}
+output:
+  html_document: default
+  pdf_document: default
+fig_caption: yes
+---
+
+#O que é R
+
+R é um ambiente de programação de métodos estatísticos.  Derivado do software 
+S,  pelo qual John Chambers venceu ACM Software Systems award. A desvantagem é que usando o R
+pode requerir mudanças na forma como analisar, visualizar e manipular dados.
+R é baseado em linhas de comandos.
+
+O R base tem menos pacotes estatísticos inclusos em comparação com SPSS ou SAS, 
+mas ele  é muito mais fácil de extendê-lo. 
+
+Atulamente, existem disponiveis no website CRAN aproximadamente 10 000  pacotes 
+(Revolutionanalytics, 2017)
+
+#R como calculadora
+
+```{r}
+
+2 + 2 
+
+5 - 10
+
+3 * 2
+
+80 / 100
+
+2^10
+
+sqrt(49)
+
+1/ 0
+
+sqrt(-1)
+
+x = 3
+
+y = 2
+
+x + y
+
+round(pi,6)
+
+```
+
+#Lendo dados 
+
+##Arquivos .txt
+
+A função ``read.table()''  é u uma das principais funções do R;
+Importa dados para memoria RAM do computador.  Cuidado ao armazenar grande quantidade de dados!
+Principais argumentos da função:  file, header, sep, row.names, nrows.
+
+Exemplo arquivo: ``softdrin.txt''
+
+```{r}
+dados  = read.table(file = "softdrin.txt", header = TRUE)
+head(dados)
+```
+
+##Arquivos .csv 
+
+        
+As funções : ``read.csv()'' e ``read.csv2()'' funcionam de forma similar a função  ``read.table()''; ``read.csv()'' considera a virgula como separador das colunas e o ponto como separador dos numeros decimais, ``read.csv2()'' considera o ponto e virgula como separador das colunas e a virgula como separador dos numeros decimais.
+
+Exemplos:  Arquivos ``forestfires.csv'' and forestfires.csv2}
+
+```{r}
+dados_csv  = read.csv(file = "forestfires.csv", header = TRUE)
+head(dados_csv)
+
+dados_csv2  = read.csv2(file = "forestfires2.csv", header = TRUE)
+head(dados_csv2)
+```
+
+**Obs:
+
+``read.table()'' pode ler arquivos diretamente da internet
+
+```{r}
+fl2000<-read.table("http://faculty.washington.edu/tlumley/data/FLvote.dat", header=TRUE)
+head(fl2000)
+```
+
+#Objetos
+
+##Vetores
+
+Conjunto de elementos do mesmo tipo (logical, numeric, integer, double character)
+
+1. A forma mais simples de se criar um vetor é usar a  função de concatenação ``c()''.
+
+```{r}
+value.num  = c(3,4,2,6,20)
+
+value.num
+
+value.char = c("koala", "kangaroo")
+
+value.char
+
+value.logical = c(FALSE, FALSE, TRUE, TRUE)
+
+value.logical
+```
+
+2. Segunda maneira de criar vetor no R: usando a  função ``scan''
+
+```{r}
+values = scan(text="
+2
+3
+4
+5"
+)
+
+values
+```
+3. Outra opção usando comando ``rep''
+
+```{r}
+rep(1,5)
+
+rep(c(1,2),3)
+
+rep(c(1,6),each=3)
+
+rep(c(1,6),c(3,5))
+
+```
+4. Outra opção usando comando ``seq''
+
+```{r}
+seq(from=1,to=5)
+
+seq(from=1, to=5, by=0.1)
+
+seq(from=1, to=5, length=10)
+
+rep(seq(from=1, to=5, length=10),each=2)
+
+
+```
+5. Outra opção usando comando ``:''
+
+```{r}
+
+1:5
+
+c(1:5,10)
+
+
+```
+
+
+## Operações com Vetores
+
+```{r}
+
+x = 1:4
+
+y = 5:8
+
+x + y
+
+2*x +1
+
+x * y
+
+x / y
+
+log(x)
+
+log(x,10)
+
+sum(x)
+
+mean(x)
+
+prod(x)
+
+var(x)
+
+```
+
+##Matriz
+
+Conjunto de elementos dispostos em linhas e colunas, em que todos os elementos são do mesmo tipo
+
+```{r}
+mat.num  = matrix(c(1:16),4,4)
+
+mat.num
+
+mat.char = matrix(LETTERS[1:4],2,2)
+
+mat.char
+
+
+```
+
+#Manipulando Matrizes
+
+
+```{r}
+
+#Criando nomes para as linhas de uma matriz
+
+rownames(mat.num) = c("Sao Paulo", "Americana", "Piracicaba", "Madson" )
+
+colnames(mat.num) = 1:4
+
+mat.num
+
+#Multiplicacao elemento a elemento
+
+mat.num2 = diag(seq(10,40,by=10))
+
+mat.num2
+
+mat.num3 = mat.num * mat.num2
+
+mat.num3
+
+#Multiplicacao de Matrizes
+
+iden = diag(4)
+
+iden
+
+mat.num%*%iden
+
+#Acessando elementos das matrizes 
+
+#Um elemento
+mat.num[1,1]
+
+#Linhas 
+mat.num[1,]
+
+#Colunas
+mat.num[,3]
+
+#Sub Matrizes
+
+mat.num[c(1,3,4), c(2,1,4)]
+
+mat.num[c(T,F,T,T), c(T,T,F,T)]
+
+mat.num[-c(1,3,4), -c(2,1,4)]
+
+```
+
+#Data.frames
+
+São Similares as matrizes no entanto permite que as colunas tenham diferentes tipos
+
+
+```{r}
+
+data(iris)
+
+iris
+
+iris$Sepal.Length
+
+iris$Renato = TRUE
+
+iris
+
+
+```
+
+
+#List
+
+Generalização dos vetores no sentido que uma lista é uma coleção de objetos
+
+
+```{r}
+A = list(x = 1:4, y = matrix(1:4,2,2), w = dados, v = list(A=4,B=5))
+
+A
+
+A[[1]]
+
+A[[4]]
+
+A$x
+
+A$y
+
+B = list(s = 1:5, r = 2)
+
+Q = c(A,B)
+
+Q
+
+```
+
