@@ -1,0 +1,159 @@
+---
+title: "Aula 3 - Introdução à biblioteca ggplot2"
+in_header: \usepackage{graphicx, color, verbatim, fancyvrb, setspace, amsfonts, amsmath,amssymb}
+output:
+  html_document: default
+  pdf_document: default
+fig_caption: yes
+---
+
+```{r}
+#Apagar todos os objetos da memoria
+rm(list=ls())
+```
+
+#O que são a gramática dos gráficos?
+
+Brevemente, a  gramática nos diz que um  gráfico
+estatistico é um mapeamento a partir dos dados à atributos
+estéticos (cores, formas e tamanhos) de objetos 
+geométricos (pontos, linhas, barras) (Wickham, 2009).
+
+
+#Componentes
+
+1. Os dados **(data)** que voce quer visualizar e o conjunto de mapeamentos estéticos que descrevem como as variáveis
+nos dados são mapeadas aos atributos estéticos que voce
+pode perceber.
+
+2. Objetos geométricos **(geoms)** que representam o que
+voce na verdade ver nos graficos: pontos, linhas, poligonos,
+etc .
+
+3. **(stats)** para resumir os dados em muitas maneiras.
+Por exemplo, contar observações para criar histogramas,
+ **(stats)** é opcional mas muito util.
+ 
+4. **(scales)** produz uma legenda ou eixo, o qual prove
+ um mapeamento inverso para fazer possivel ler os dados
+ originais atraves do grafico
+ 
+5. Um sistema de coordenadas,  **(coord)**, descreve como
+os dados são mapeados no plano de um grafico. Isto
+tambem prove eixos e linhas de grid para ser possivel
+ler no grafico. Normalmente, coordenadas cartesianas
+são utilizadas, mas um numero de outras estão disponiveis,
+incluindo coordenadas polares e projeções de mapa. 
+
+6. Facetas **(facet)** descreve como quebrar os dados em 
+subconjuntos e como mostra-los em pequenos e multiplos graficos.
+
+
+#Iniciando com a funcao qplot
+
+##Uso basico
+
+```{r}
+#Carregar biblioteca ggplot2
+
+library(ggplot2)
+
+#Conjunto de dados  - Diamantes
+data(diamonds)
+
+#Imprimir as primeiras 6 linhas
+head(diamonds)
+
+#Mostrar a estrutura do data.frame
+str(diamonds)
+
+#Grafico de dispersao quilates versus preco
+qplot(carat, price, data = diamonds, xlab="quilates",
+      ylab="preco")
+
+#Grafico de dispersao quilates versus preco em escala 
+#logaritmica para os dois eixos
+
+
+qplot(log(carat), log(price), data = diamonds, xlab="quilates", ylab="preco", xlim=c(-2,2), ylim=c(5,10))
+
+#Grafico de dispersao quilates versus volume (x * y * z)
+
+qplot(carat, x*y*z, data = diamonds, xlab="quilates", ylab="volume" )
+
+```
+
+##Usando atributos estéticos: cores, formas e tamanhos
+
+```{r}
+
+#Grafico de dispersao quilates versus preco
+#com cores diferentes para cada cor de diamante
+qplot(log(carat), log(price), data = diamonds, colour = color)
+
+#Grafico de dispersao quilates versus preco
+#com formas diferentes para cada corte de diamante
+qplot(log(carat), log(price), data = diamonds, shape = cut)
+
+#Grafico de dispersao quilates versus preco
+#tornando os pontos transparentes
+
+qplot(carat, price, data = diamonds, alpha = I(1/10))
+qplot(carat, price, data = diamonds, alpha = I(1/100))
+qplot(carat, price, data = diamonds, alpha = I(1/200))
+
+
+```
+
+
+##Formas  geometricas  
+
+1. geom = "point" produz pontos em um grafico de dispersão (default).
+2. geom = "smooth" ajusta uma "curva alisada" aos dados.
+3. geom = "boxplot" produz um box plot.
+4. geom = "path" and geom = "line" produz lines entre os dados.
+5. geom = "histogram"  produz histogramas
+6. geom = "density" ajusta um estimador de densidade nao parametrico.
+7. geom = "bar" ajusta um grafico de barras.
+
+###Ajustando uma reta aos dados
+
+```{r}
+#Grafico de dispersao quilates versus preco
+#com uma reta de regressao ajustadas
+qplot(log(carat), log(price), data = diamonds, 
+      geom = c("point", "smooth"), method="lm")
+
+```
+
+
+
+###Histograma
+
+```{r}
+#Ler os dados
+tab21 = read.table("tabela2.1.txt", sep=";", dec=",", header = TRUE)
+
+qplot(salario, data = tab21,  xlim=c(0,24),  binwidth = 4,  
+      main = "Histograma para Salario da empresa MB", 
+      xlab = "Salarios",  
+      fill=I("red"), 
+      col=I("black"))
+```
+###Grafico de barras
+
+```{r}
+#Frequencia Absoluta
+qplot(reg_procedencia, data = tab21,   geom = c("bar"),  
+      main = "Grafico de barras - Freq. Absoluta", 
+      stat="identity",
+      ylim = c(0,15),
+      xlab = "Regiao de Procedencia",  
+      fill=I("red"), 
+      col=I("black"))
+```
+
+
+
+
+
